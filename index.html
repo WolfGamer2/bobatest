@@ -3,132 +3,103 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Boba Hackathon Submission Reviewer</title>
+    <title>Boba Hackathon Submission Viewer</title>
     <style>
-        /* Import Google Fonts */
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap');
-
-        /* General Styles */
+        /* Basic Styles */
         body {
-            font-family: 'Inter', sans-serif;
-            background-color: #F9EAE8;
-            color: #343434;
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
             margin: 0;
-            padding: 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: auto;
-            min-height: 100vh;
-            position: relative;
+            padding: 20px;
         }
-
-        h1 {
-            color: #5F275F;
-            text-align: center;
-            font-size: 3rem;
-            margin-bottom: 20px;
-        }
-
-        .container {
-            background-color: #FFFFFF;
-            border-radius: 10px;
-            padding: 30px;
-            max-width: 600px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-            margin-bottom: 20px;
-            width: 90%;
-        }
-
-        label {
-            display: block;
-            font-size: 1.2rem;
-            margin-bottom: 10px;
-            color: #5F275F;
-        }
-
-        input, select {
-            width: 100%;
+        input {
             padding: 10px;
-            font-size: 1rem;
-            border: 2px solid #D68AB3;
+            margin-right: 10px;
+            border: 1px solid #ccc;
             border-radius: 5px;
-            margin-bottom: 20px;
-            transition: border-color 0.3s;
         }
-
-        input:focus, select:focus {
-            border-color: #B35CA6;
-            outline: none;
-        }
-
         button {
-            background-color: #B35CA6;
+            padding: 10px 15px;
+            background-color: #28a745;
             color: white;
-            padding: 12px 20px;
             border: none;
             border-radius: 5px;
-            font-size: 1.2rem;
             cursor: pointer;
-            transition: background-color 0.3s;
-            width: 100%;
         }
-
         button:hover {
-            background-color: #9F419B;
+            background-color: #218838;
         }
-
         ul {
-            list-style: none;
+            list-style-type: none;
             padding: 0;
         }
-
         li {
-            background-color: #F3D1F4;
-            border: 2px solid #E0A9E6;
-            border-radius: 8px;
-            padding: 15px;
-            margin: 10px 0;
-            word-wrap: break-word;
-        }
-
-        li strong {
-            display: block;
-            margin-bottom: 8px;
-            color: #B35CA6;
+            background-color: #fff;
+            margin: 5px 0;
+            padding: 10px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
         }
     </style>
 </head>
 <body>
 
-    <h1>Boba Hackathon Submission Reviewer</h1>
+    <h1>Boba Hackathon Submission Viewer</h1>
+    <input type="text" id="event-code" placeholder="Enter Event Code" />
+    <button id="getSubmissions">Get Submissions</button>
+    <ul id="submissionList"></ul>
 
-    <!-- Container for submissions -->
-    <div class="container">
-        <h2>View Websites by Event Code</h2>
-        <label for="event-code">Enter Event Code:</label>
-        <input type="text" id="event-code" placeholder="e.g., ABC123" />
-        <button id="getWebsites">Find Websites</button>
-        <ul id="websites-list"></ul>
-    </div>
+    <script>
+        // Use your personal access token here
+        const personalAccessToken = 'patdfXp1GNKbEgjA6.95bf5a74f7c45af0bfc40004081122ceb9ed0205e99d922948d0b14cd54ea69e'; // Replace with your actual personal access token
+        const baseId = 'app05mIKwNPO2l1vT'; // Replace with your actual Base ID
+        const tableName = 'Boba - YSWS'; // Replace with your actual Table Name
 
-    <!-- Optional Form to Add a Submission -->
-    <div class="container">
-        <h2>Add Submission</h2>
-        <label for="submission-details">Submission Details:</label>
-        <input type="text" id="submission-details" placeholder="Enter details about the submission" />
+        async function fetchSubmissions(eventCode) {
+            const url = `https://api.airtable.com/v0/${baseId}/${tableName}?filterByFormula={eventCode}="${eventCode}"`;
 
-        <label for="submission-status">Status:</label>
-        <select id="submission-status">
-            <option value="Pending">Pending</option>
-            <option value="Accepted">Accepted</option>
-            <option value="Rejected">Rejected</option>
-        </select>
+            try {
+                const response = await fetch(url, {
+                    headers: {
+                        Authorization: `Bearer ${personalAccessToken}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
 
-        <button id="addSubmission">Add Submission</button>
-    </div>
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
 
-    <script src="script.js"></script>
+                const data = await response.json();
+                return data.records || [];
+            } catch (error) {
+                console.error('Error fetching submissions:', error);
+                return [];
+            }
+        }
+
+        document.getElementById('getSubmissions').addEventListener('click', async () => {
+            const eventCode = document.getElementById('event-code').value;
+            const submissions = await fetchSubmissions(eventCode);
+            const submissionList = document.getElementById('submissionList');
+            submissionList.innerHTML = '';
+
+            if (submissions.length > 0) {
+                submissions.forEach(record => {
+                    const listItem = document.createElement('li');
+                    listItem.innerHTML = `
+                        <strong>Name:</strong> ${record.fields.name || 'N/A'}
+                        <br>
+                        <strong>Website:</strong> <a href="${record.fields.gitHubURL}" target="_blank">${record.fields.gitHubURL || 'N/A'}</a>
+                        <br>
+                        <strong>Status:</strong> ${record.fields.status || 'N/A'}
+                    `;
+                    submissionList.appendChild(listItem);
+                });
+            } else {
+                submissionList.innerHTML = '<li>No submissions found for this event code.</li>';
+            }
+        });
+    </script>
 </body>
 </html>
