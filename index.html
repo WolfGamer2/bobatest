@@ -19,7 +19,8 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            height: 100vh;
+            height: auto;
+            min-height: 100vh;
             position: relative;
         }
 
@@ -105,8 +106,11 @@
 
     <!-- Container for submissions -->
     <div class="container">
-        <h2>Submissions</h2>
-        <ul id="submissions-list"></ul>
+        <h2>View Websites by Event Code</h2>
+        <label for="event-code">Enter Event Code:</label>
+        <input type="text" id="event-code" placeholder="e.g., ABC123" />
+        <button id="getWebsites">Find Websites</button>
+        <ul id="websites-list"></ul>
     </div>
 
     <!-- Optional Form to Add a Submission -->
