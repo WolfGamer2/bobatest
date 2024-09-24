@@ -35,11 +35,11 @@ document.getElementById('getSubmissions').addEventListener('click', async () => 
         submissions.forEach(record => {
             const listItem = document.createElement('li');
             listItem.innerHTML = `
-                <strong>Name:</strong> ${record.fields.name || 'N/A'}
+                <strong>Name:</strong> ${record.fields.name || 'Name'}
                 <br>
-                <strong>Website:</strong> <a href="${record.fields.gitHubURL}" target="_blank">${record.fields.gitHubURL || 'N/A'}</a>
+                <strong>Website:</strong> <a href="${record.fields.gitHubURL}" target="_blank">${record.fields.gitHubURL || 'GitHub Pages URL'}</a>
                 <br>
-                <strong>Status:</strong> ${record.fields.status || 'N/A'}
+                <strong>Status:</strong> ${record.fields.status || 'Status'}
             `;
             submissionList.appendChild(listItem);
         });
