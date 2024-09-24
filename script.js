@@ -1,21 +1,16 @@
-const apiKey = 'pat84MLj08BHlZkVu.87f94a21eafef0884ffa0e4ba1c822e4744fd35687c9bd71202f1b9038d5e705';
-const baseId = 'app05mIKwNPO2l1vT';
-const tableName = 'Boba - YSWS';
+const personalAccessToken = 'patdfXp1GNKbEgjA6.95bf5a74f7c45af0bfc40004081122ceb9ed0205e99d922948d0b14cd54ea69e'; // Replace with your actual personal access token
+const baseId = 'app05mIKwNPO2l1vT'; // Replace with your actual Base ID
+const tableName = 'Boba - YSWS'; // Replace with your actual Table Name
 
-const eventCodeFieldId = 'fldJE64wXx0NtfFJY';   
-const gitHubURLFieldId = 'fldiQTbHOJ4Smo2Cx';   
-const statusFieldId = 'fldjRo5emakYHTKnY';       
-const nameFieldId = 'fldeAMpKMvhiFAokN';         
-
-async function getWebsitesByEventCode(eventCode) {
-    const url = `https://api.airtable.com/v0/${baseId}/${tableName}?filterByFormula={${eventCodeFieldId}}="${eventCode}"`;
+async function fetchSubmissions(eventCode) {
+    const url = `https://api.airtable.com/v0/${baseId}/${tableName}?filterByFormula={eventCode}="${eventCode}"`;
 
     try {
         const response = await fetch(url, {
             headers: {
-                Authorization: `Bearer ${apiKey}`,
-                'Content-Type': 'application/json',
-            },
+                Authorization: `Bearer ${personalAccessToken}`,
+                'Content-Type': 'application/json'
+            }
         });
 
         if (!response.ok) {
@@ -23,45 +18,32 @@ async function getWebsitesByEventCode(eventCode) {
         }
 
         const data = await response.json();
-
-        if (data.records.length > 0) {
-            return data.records.map(record => ({
-                name: record.fields[nameFieldId] || 'N/A',
-                gitHubURL: record.fields[gitHubURLFieldId] || 'N/A',
-                status: record.fields[statusFieldId] || 'N/A',
-            }));
-        } else {
-            return [];
-        }
+        return data.records || [];
     } catch (error) {
-        console.error('Fetch error:', error);
+        console.error('Error fetching submissions:', error);
         return [];
     }
 }
 
-// Fetching websites when the button is clicked
-document.getElementById('getWebsites').addEventListener('click', async () => {
+document.getElementById('getSubmissions').addEventListener('click', async () => {
     const eventCode = document.getElementById('event-code').value;
-    const websites = await getWebsitesByEventCode(eventCode);
-    const websitesList = document.getElementById('websites-list');
-    websitesList.innerHTML = '';
+    const submissions = await fetchSubmissions(eventCode);
+    const submissionList = document.getElementById('submissionList');
+    submissionList.innerHTML = '';
 
-    if (websites.length > 0) {
-        websites.forEach(website => {
+    if (submissions.length > 0) {
+        submissions.forEach(record => {
             const listItem = document.createElement('li');
             listItem.innerHTML = `
-                <strong>Name:</strong> ${website.name}
+                <strong>Name:</strong> ${record.fields.name || 'N/A'}
                 <br>
-                <a href="${website.gitHubURL}" target="_blank">${website.gitHubURL}</a>
+                <strong>Website:</strong> <a href="${record.fields.gitHubURL}" target="_blank">${record.fields.gitHubURL || 'N/A'}</a>
                 <br>
-                <strong>Status:</strong> ${website.status}
+                <strong>Status:</strong> ${record.fields.status || 'N/A'}
             `;
-            websitesList.appendChild(listItem);
+            submissionList.appendChild(listItem);
         });
     } else {
-        websitesList.innerHTML = '<li>No websites found for this event code.</li>';
+        submissionList.innerHTML = '<li>No submissions found for this event code.</li>';
     }
 });
-
-// Functionality for adding submissions can be added here
-
