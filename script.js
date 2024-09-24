@@ -1,3 +1,8 @@
+headers: {
+    Authorization: `Bearer ${apiKey}`, // This should be your personal access token
+    'Content-Type': 'application/json'
+}
+
 const personalAccessToken = 'patdfXp1GNKbEgjA6.95bf5a74f7c45af0bfc40004081122ceb9ed0205e99d922948d0b14cd54ea69e'; // Replace with your actual personal access token
 const baseId = 'app05mIKwNPO2l1vT'; // Replace with your actual Base ID
 const tableName = 'Boba - YSWS'; // Replace with your actual Table Name
