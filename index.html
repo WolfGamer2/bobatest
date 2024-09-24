@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Submission Reviewer</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1>Submission Reviewer</h1>
+    <button id="fetchSubmissions">Fetch Submissions</button>
+    <ul id="submissionList"></ul>
+
+    <div id="submissionDetails" class="hidden">
+        <h2>Submission Details</h2>
+        <p id="submissionTitle"></p>
+        <p id="submissionStatus"></p>
+        <textarea id="reviewerComments" placeholder="Add comments here..."></textarea>
+        <button id="updateStatus">Update Status</button>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
