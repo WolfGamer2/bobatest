@@ -3,20 +3,126 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Submission Reviewer</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Boba Hackathon Submission Reviewer</title>
+    <style>
+        /* Import Google Fonts */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap');
+
+        /* General Styles */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #F9EAE8;
+            color: #343434;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            position: relative;
+        }
+
+        h1 {
+            color: #5F275F;
+            text-align: center;
+            font-size: 3rem;
+            margin-bottom: 20px;
+        }
+
+        .container {
+            background-color: #FFFFFF;
+            border-radius: 10px;
+            padding: 30px;
+            max-width: 600px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            width: 90%;
+        }
+
+        label {
+            display: block;
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+            color: #5F275F;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 10px;
+            font-size: 1rem;
+            border: 2px solid #D68AB3;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            transition: border-color 0.3s;
+        }
+
+        input:focus, select:focus {
+            border-color: #B35CA6;
+            outline: none;
+        }
+
+        button {
+            background-color: #B35CA6;
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 5px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            width: 100%;
+        }
+
+        button:hover {
+            background-color: #9F419B;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        li {
+            background-color: #F3D1F4;
+            border: 2px solid #E0A9E6;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 10px 0;
+            word-wrap: break-word;
+        }
+
+        li strong {
+            display: block;
+            margin-bottom: 8px;
+            color: #B35CA6;
+        }
+    </style>
 </head>
 <body>
-    <h1>Submission Reviewer</h1>
-    <button id="fetchSubmissions">Fetch Submissions</button>
-    <ul id="submissionList"></ul>
 
-    <div id="submissionDetails" class="hidden">
-        <h2>Submission Details</h2>
-        <p id="submissionTitle"></p>
-        <p id="submissionStatus"></p>
-        <textarea id="reviewerComments" placeholder="Add comments here..."></textarea>
-        <button id="updateStatus">Update Status</button>
+    <h1>Boba Hackathon Submission Reviewer</h1>
+
+    <!-- Container for submissions -->
+    <div class="container">
+        <h2>Submissions</h2>
+        <ul id="submissions-list"></ul>
+    </div>
+
+    <!-- Optional Form to Add a Submission -->
+    <div class="container">
+        <h2>Add Submission</h2>
+        <label for="submission-details">Submission Details:</label>
+        <input type="text" id="submission-details" placeholder="Enter details about the submission" />
+
+        <label for="submission-status">Status:</label>
+        <select id="submission-status">
+            <option value="Pending">Pending</option>
+            <option value="Accepted">Accepted</option>
+            <option value="Rejected">Rejected</option>
+        </select>
+
+        <button id="addSubmission">Add Submission</button>
     </div>
 
     <script src="script.js"></script>
